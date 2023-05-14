@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personalized Product Recommendation Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: rgb(206, 184, 157);
+        }
+        
+        .quiz-container {
+            margin-top: 50px;
+        }
+        
+        .hide {
+            display: none;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .start-button {
+            background-color: #090909;
+        }
+        
+        .answer-button {
+            background-color: #8f482c;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="row d_flex">
+        <div class="col-xl-1 col-lg-3 col-sm-2 col logo_section">
+           <div class="full">
+              <div class="center-desk">
+                 <div class="logo">
+                    <!-- <a href="index.html">Zon</a> -->
+                    <img src="images/THE_CUP_CULTURE__1___1_-removebg-preview.png" style="float:left; width:100px; height:100px;">
+                
+                 </div>
+              </div>
+           </div>
+        </div>
+    </div>
+    
+    <div class="quiz-container">
+        <h1 style="justify-content: center;">Personalized Product Recommendation Quiz</h1>
+        <p>Answer a few questions to get personalized product recommendations for your taste.</p>
+        
+        <div id="question-container" class="hide">
+            <div id="question-text"></div>
+            <div id="answer-buttons" class="button-container"></div>
+        </div>
+        
+        <button id="start-button" class="start-button">Start Quiz</button>
+    </div>
+
+    <script>
+        const questions = [
+    {
+        question: "How do you like your coffee?",
+        answers: [
+            { text: "Black", score: 1 },
+            { text: "With milk", score: 2 },
+            { text: "With cream and sugar", score: 3 }
+        ]
+    },
+    {
+        question: "Do you prefer hot or cold beverages?",
+        answers: [
+            { text: "Hot", score: 1 },
+            { text: "Cold", score: 2 }
+        ]
+    },
+    {
+        question: "Which flavor profile do you prefer?",
+        answers: [
+            { text: "Bold and strong", score: 1 },
+            { text: "Mild and smooth", score: 2 },
+            { text: "Sweet and flavored", score: 3 }
+        ]
+    }
+];
+
+const resultProducts = {
+    3: "Cappuccino",
+    4: "Espresso",
+    5: "Latte",
+    6: "Iced Coffee",
+    7: "Mocha",
+    8: "Frappe"
+};
+
+const startButton = document.getElementById('start-button');
+const questionContainer = document.getElementById('question-container');
+const questionText = document.getElementById('question-text');
+const answerButtons = document.getElementById('answer-buttons');
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+startButton.addEventListener('click', startQuiz);
+
+function startQuiz() {
+    startButton.classList.add('hide');
+    questionContainer.classList.remove('hide');
+    showQuestion();
+}
+
+function showQuestion() {
+    const question = questions[currentQuestionIndex];
+    questionText.innerText = question.question;
+    answerButtons.innerHTML = '';
+
+    question.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.innerText = answer.text;
+        button.classList.add('answer-button');
+        button.addEventListener('click', () => selectAnswer(answer.score));
+        answerButtons.appendChild(button);
+    });
+}
+
+function selectAnswer(answerScore) {
+    score += answerScore;
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    questionContainer.classList.add('hide');
+    const result = getResultProduct(score);
+    const resultText = document.createElement('p');
+    resultText.innerText = `Based on your answers, we recommend the ${result}! Enjoy!`;
+    document.body.appendChild(resultText);
+}
+
+function getResultProduct(score) {
+    if (score in resultProducts) {
+        return resultProducts[score];
+    } else {
+        return "Unknown Product";
+    }
+}
+
+
+    </script>
+</body>
+</html>
